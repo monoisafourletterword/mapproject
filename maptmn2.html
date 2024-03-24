@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мероприятия в Тюмени</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @media (max-width: 1920px) {
+            body {
+                zoom: 85%
+            }
+        }
+
+        /* Стили для анимированной метки */
+        .form-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .label-floating {
+            position: absolute;
+            pointer-events: none;
+            left: 10px;
+            top: 8px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .input-focused .label-floating {
+            top: -20px;
+            left: 2px;
+            font-size: 12px;
+            color: #007bff;
+        }
+
+        /* Скрыть список мероприятий по умолчанию */
+        .events-list {
+            display: none;
+            margin-top: 270px;
+            padding: 15px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
+    <script src="https://unpkg.com/@2gis/mapgl-clusterer@^2/dist/clustering.js"></script>
+    <script src="https://unpkg.com/@2gis/mapgl-gltf@^1/dist/bundle.js"></script>
+    <div id="container">
+        <div id="sidebar">
+            <div class="sidebarhead"
+                style="background-image: url('images/city/tyumen.jpg'); background-size: 500px; background-position:center;">
+                <div class="topofsidebar">
+                    <div class="logo">
+                        <img src="Images/RGB_moremdpi.png" alt="Логотип" id="logo">
+                    </div>
+                    <div id="city">Тюмень</div>
+                    <div id="date">18 марта, Понедельник</div>
+                </div>
+
+                <input type="text" placeholder="Поиск (по мероприятиям)" id="search">
+                <div class="search-results"></div>
+                <div class="event" id="showWholeCity" style="font-weight: 400;">Показать весь город</div>
+            </div>
+            <div class="types-list">
+                <div class="types-row types-row-1">
+                    <div class="event-type" data-type="Фитнес и здоровье">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #b0ffee, #32c4c0);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Фитнес и здоровье</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="Спортивные">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #60efff, #0061ff  );">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Спортивные</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="Экскурсии">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #dfc3fa, #6c3de2);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Экскурсии</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="На свежем воздухе">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #f3f520, #59d102);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">На свежем воздухе</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="Театральные постановки">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #fff95b, #f88a04);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Театральные постановки</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="Концерты">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #f9ab8f, #f40752);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Концерты</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="types-row types-row-2">
+                    <div class="event-type" data-type="Мастер-классы">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #74edc4, #116d4f);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Мастер-классы</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="Клубы по интересам">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #adaef5, #1518b9);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Клубы по интересам</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="Квизы и викторины">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #f7af3c,  #e62314);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Квизы и викторины</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="Конференции">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #FFB685, #AC490C);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Конференции</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="Лекции и семинары">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right,  #fbbbc2, #bf0020);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Лекции и семинары</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="Фестивали">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #f9bcef, #bd12af);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Фестивали</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="types-row types-row-3">
+                    <div class="event-type" data-type="Выставки">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #ccd8ec, #6d90b9);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Выставки</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="Для детей">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #FFFF33, #FFCC00);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Для детей</p>
+                        </div>
+                    </div>
+                    <div class="event-type" data-type="Бесплатные">
+                        <div class="event-type-content">
+                            <div class="circle" style="background: linear-gradient(to right, #c8f2d9, #72f88d);">
+                                <span class="event-type-count"></span>
+                            </div>
+                            <p class="event-type-name">Бесплатные</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="events-list"></div>
+
+        </div>
+
+        <div id="map"></div>
+    </div>
+    <div id="personalPageButton">
+        <i class="fas fa-user"></i>
+        <img src="https://cs13.pikabu.ru/avatars/5580/x5580240-656074953.png" alt="User" id="userImage">
+    </div>
+    <div id="back" style="display: none; rotate: 180deg;">
+        <i class="fas fa-user"></i>
+        <img src="images/back.svg" alt="User"
+            id="backImage">
+    </div>
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Вход</h2>
+            <div class="tabholder">
+                <div class="tablike-active">
+                    Клиент
+                </div>
+                <div class="tablike">
+                    Организатор
+                </div>
+            </div>
+            <br>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="label-floating" for="username">Имя пользователя</label>
+                    <input type="text" id="username" name="username" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="label-floating" for="password">Пароль</label>
+                    <input type="password" id="password" name="password" required class="form-control">
+                </div>
+                <button type="submit">Войти</button>
+                <a href="cabinet.html">Кабинет</a>
+            </form>
+        </div>
+    </div>
+    <script src="events.js"></script>
+    <script src="icons.js"></script>
+    <script src="organizations.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Получаем кнопку и модальное окно
+        var personalPageButton = document.getElementById("personalPageButton");
+        var modal = document.getElementById("loginModal");
+
+        // При нажатии на кнопку, отображаем модальное окно
+        personalPageButton.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // Обработка отправки формы
+        var loginForm = document.getElementById("loginForm");
+
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+
+            // Здесь вы можете добавить логику для отправки данных на сервер или выполнения других действий
+
+            // После успешной отправки данных, вы можете закрыть модальное окно
+            closeModal();
+        });
+
+        // Функция для закрытия модального окна
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // Когда пользователь нажимает на <span> (x), закрываем модальное окно
+        var closeBtn = document.getElementsByClassName("close")[0];
+        closeBtn.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // Закрываем модальное окно, если пользователь щелкает за его пределами
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var formControls = document.querySelectorAll('.form-control');
+            formControls.forEach(function (input) {
+                input.addEventListener('focus', function () {
+                    this.parentNode.classList.add('input-focused');
+                });
+                input.addEventListener('blur', function () {
+                    if (this.value == "") {
+                        this.parentNode.classList.remove('input-focused');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

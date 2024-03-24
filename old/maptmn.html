@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мероприятия в Тюмени</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Подключение API Яндекс Карт -->
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=&lang=ru_RU" type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="sidebar">
+            <div class="logo">
+                <img src="https://media.tenor.com/Wm4odz1R8A0AAAAi/improviz-blender.gif" alt="Логотип" id="logo">
+                <h3 id="kaleido">КАЛЕЙДОСКОП</h3>
+            </div>
+            <input type="text" placeholder="Поиск (по мероприятиям)" id="search">
+            <div class="search-results"></div>
+            <div id="city">Тюмень</div>
+            <div id="date">2 марта 2024, Вторник</div>
+            <div class="event" id="showWholeCity" style="font-weight: 400;">Показать весь город</div>
+            <div class="types-list">
+                <div class="event-type" data-type="Фитнес и здоровье">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #00cccb;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Фитнес и здоровье</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="Спортивные">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #17d008;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Спортивные</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="Экскурсии">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #175cff;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Экскурсии</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="На свежем воздухе">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #175cff;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">На свежем воздухе</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="Выставки">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #855cff;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Выставки</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="Мастер-классы">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #ff69b4;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Мастер-классы</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="Театральные постановки">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #ff4500;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Театральные постановки</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="Лекции и семинары">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #ffd700;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Лекции и семинары</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="Клубы по интересам">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #32cd32;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Клубы по интересам</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="Квизы и викторины">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #4682b4;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Квизы и викторины</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="Конференции">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #a0522d;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Конференции</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="Фестивали">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #ff1493;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Фестивали</span>
+                    </div>
+                </div>
+                <div class="event-type" data-type="Концерты">
+                    <div class="event-type-content">
+                        <div class="circle" style="background-color: #8a2be2;"><span class="event-type-count"></span>
+                        </div>
+                        <span class="event-type-name">Концерты</span>
+                    </div>
+                </div>
+                <!-- Добавьте другие типы мероприятий по аналогии -->
+            </div>
+
+
+
+
+            <div class="events-list"></div>
+
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <div id="personalPageButton">
+        <i class="fas fa-user"></i>
+        <img src="https://cs13.pikabu.ru/avatars/5580/x5580240-656074953.png" alt="User" id="userImage">
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Вход / Регистрация</h2>
+            <form id="loginForm">
+                <label for="username">Имя пользователя:</label><br>
+                <input type="text" id="username" name="username"><br>
+                <label for="password">Пароль:</label><br>
+                <input type="password" id="password" name="password"><br><br>
+                <button type="submit">Войти</button>
+                <a href="C:/Map Project/cabinet.html">Кабинет</a>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var events = [
+            {
+                name: "Лыжные гонки",
+                type: "Спортивные",
+                organization: "Искусство в движении",
+                coordinates: [57.159946, 65.531462],
+                image: "C:/Users/HP/Downloads/_resized_6473070-16b7923c9a8e4fc686b82b452bf767e4.jpg",
+                description: "Соревнование на лыжах, где спортсмены преодолевают определенное расстояние на скорость, используя технику классического или конькового хода.",
+                date: "2024-03-05",
+                time: "8:00-16:30",
+                price: "0",
+                capacity: 100,
+                attendees: 80
+            },
+            {
+                name: "Искусство XX века",
+                type: "Мастер-классы",
+                organization: "Школа искусств",
+                coordinates: [57.159404, 65.559400],
+                image: "C:/Users/HP/Downloads/489b5c0888e97759b8c0535246f3557b.jpg",
+                description: "Культурное событие, посвященное изучению и анализу художественных произведений, созданных в XX веке, отражающих разнообразие течений и направлений в мировом искусстве.",
+                date: "2024-03-08",
+                time: "10:30-20:00",
+                price: "500",
+                capacity: 50,
+                attendees: 40
+            },
+            {
+                name: "Армрестлинг",
+                type: "Спортивные",
+                organization: "Активный отдых",
+                coordinates: [57.144777, 65.573333],
+                image: "C:/Users/HP/Downloads/hqdefault.jpg",
+                description: "Соревнование, в котором два соперника сидят за столом и схватываются руками, пытаясь сдвинуть или опрокинуть противника на стол.",
+                date: "2024-03-10",
+                time: "11:00-19:30",
+                price: "100",
+                capacity: 30,
+                attendees: 30
+            },
+            {
+                name: "Мастер-класс по гончарному делу",
+                type: "Лекции и семинары",
+                organization: "Ретрохаус",
+                coordinates: [57.139503, 65.569587],
+                image: "C:/Users/HP/Downloads/600x0_ogqankdphcnddriv_jpg_b150.jpg",
+                description: "Урок, на котором участники могут научиться создавать уникальные глиняные изделия с использованием гончарного круга и других инструментов.",
+                date: "2024-03-15",
+                time: "12:45-21:15",
+                price: "1000",
+                capacity: 20,
+                attendees: 15
+            },
+            {
+                name: "Велопоход по горам",
+                type: "Спортивные",
+                organization: "Искусство в движении",
+                coordinates: [57.131712, 65.567044],
+                image: "C:/Users/HP/Downloads/bikekgz-037.webp",
+                description: "Активный отдых на велосипеде, в ходе которого участники проезжают сложные трассы по гористой местности, наслаждаясь природой и физической активностью.",
+                date: "2024-03-20",
+                time: "9:15-17:45",
+                price: "800",
+                capacity: 30,
+                attendees: 25
+            },
+            {
+                name: "Мастер-класс по современному танцу",
+                type: "Мастер-классы",
+                organization: "Активный отдых",
+                coordinates: [57.130945, 65.596401],
+                image: "C:/Users/HP/Downloads/5eb2c5ccee0703a0b2da9eef2cc22897_w720_h540.jfif",
+                description: "Мероприятие, на котором профессиональные танцоры делятся своими знаниями и опытом в области современного танца, помогая участникам развить технику и выразительность в танцевальном исполнении.",
+                date: "2024-03-25",
+                time: "14:30-23:00",
+                price: "2500",
+                capacity: 40,
+                attendees: 35
+            },
+        ];
+
+        var organizations = [
+            {
+                name: "Ретрохаус",
+                description: "Гончарная мастерская",
+                image: "retrohouse.jpg",
+                website: "https://retrohouse.com"
+            },
+            {
+                name: "Активный отдых",
+                description: "Организация активного отдыха",
+                image: "activeleisure.jpg",
+                website: "https://activeleisure.com"
+            },
+            {
+                name: "Искусство в движении",
+                description: "Школа танцев",
+                image: "artmotion.jpg",
+                website: "https://artmotion.com"
+            },
+            // Добавьте остальные организации аналогично
+        ];
+
+        var icons = {
+            "Фитнес и здоровье": "C:/Users/HP/Downloads/point/fiz.png",
+            "Спортивные": "C:/Users/HP/Downloads/point/sport.png",
+            "Экскурсии": "C:/Users/HP/Downloads/point/exhib.png",
+            "Выставки": "C:/Users/HP/Downloads/point/vist.png",
+            "На свежем воздухе": "C:/Users/HP/Downloads/point/nasvezh.png",
+            "Мастер-классы": "C:/Users/HP/Downloads/point/master.png",
+            "Театральные постановки": "C:/Users/HP/Downloads/point/teatr.png",
+            "Лекции и семинары": "C:/Users/HP/Downloads/point/seminar.png",
+            "Клубы по интересам": "C:/Users/HP/Downloads/point/club.png",
+            "Квизы и викторины": "C:/Users/HP/Downloads/point/quiz.png",
+            "Конференции": "C:/Users/HP/Downloads/point/conf.png",
+            "Фестивали": "C:/Users/HP/Downloads/point/fest.png",
+            "Концерты": "C:/Users/HP/Downloads/point/concert.png"
+            // Добавьте пути к изображениям для других типов мероприятий
+        };
+
+
+        var myMap;
+        var clusterer;
+        
+        ymaps.ready(initMap);
+
+
+
+        function initMap() {
+            myMap = new ymaps.Map("map", {
+                center: [57.126122, 65.57817],
+                zoom: 12,
+                controls: ['zoomControl']
+            });
+
+            // Создаем кластеризатор меток
+            clusterer = new ymaps.Clusterer({
+                preset: 'islands', // Вы можете выбрать другой предустановленный стиль или создать свой
+                clusterDisableClickZoom: true,
+                clusterOpenBalloonOnClick: false,
+                clusterBalloonContentLayout: 'cluster#balloonCarousel',
+                clusterBalloonPanelMaxMapArea: 0,
+                clusterBalloonContentLayoutWidth: 300,
+                clusterBalloonContentLayoutHeight: 200,
+                clusterBalloonPagerSize: 7
+            });
+
+            // Добавляем кластеризатор на карту
+            myMap.geoObjects.add(clusterer);
+
+            addMarkers(events);
+            updateEventTypeCounts();
+        }
+
+        function addMarkers(events) {
+            events.forEach(function (event) {
+                var placemark = new ymaps.Placemark(event.coordinates, {
+                    hintContent: event.name,
+                    balloonContent: event.name
+                }, {
+                    iconLayout: 'default#image',
+                    iconImageHref: icons[event.type],
+                    iconImageSize: [30, 36.1],
+                    iconImageOffset: [-15, -15]
+                });
+
+                // Добавляем обработчик события при клике на метку
+                placemark.events.add('click', function () {
+                    myMap.setCenter(event.coordinates, 15, { duration: 700, timingFunction: 'ease-in-out' });
+                });
+
+                clusterer.add(placemark);
+            });
+
+            // Добавляем обработчик события при клике на кластер
+            clusterer.events.add('click', function (e) {
+                var target = e.get('target');
+                if (target && target.getGeoObjects) {
+                    var geoObjects = target.getGeoObjects();
+                    var bounds = ymaps.util.bounds.fromPoints(geoObjects.map(function (geoObject) {
+                        return geoObject.geometry.getCoordinates();
+                    }));
+                    myMap.setBounds(bounds, { duration: 700, timingFunction: 'ease-in-out' });
+                }
+            });
+        }
+
+
+        function updateEventTypeCounts() {
+            var types = {};
+            events.forEach(function (event) {
+                if (types[event.type]) {
+                    types[event.type]++;
+                } else {
+                    types[event.type] = 1;
+                }
+            });
+
+            var eventTypes = document.querySelectorAll('.event-type[data-type]');
+            eventTypes.forEach(function (eventType) {
+                var type = eventType.getAttribute('data-type');
+                var count = types[type] || 0;
+                eventType.querySelector('.event-type-count').textContent = count;
+
+                eventType.addEventListener('click', function () {
+                    showEventsByType(type);
+                });
+            });
+
+        }
+
+
+        var showWholeCity = document.getElementById('showWholeCity');
+        showWholeCity.addEventListener('click', function () {
+            myMap.setCenter([57.126122, 65.57817], 12, { duration: 900, timingFunction: 'ease-in-out' });
+        });
+
+        var typesList = document.querySelector('.types-list');
+        typesList.addEventListener('click', function (e) {
+            var type = e.target.dataset.type;
+            if (type) {
+                showEventsByType(type);
+            }
+        });
+
+
+
+        function showEventsByType(type) {
+            var eventsList = document.querySelector('.events-list');
+            eventsList.innerHTML = '';
+
+            // Удаляем все метки из кластеризатора
+            clusterer.removeAll();
+
+            var back = document.createElement('div');
+            back.classList.add('nazad');
+            back.textContent = 'Назад';
+            back.onclick = function () {
+                typesList.style.display = 'block';
+                eventsList.style.display = 'none';
+                clusterer.removeAll(); // Удаляем все метки из кластеризатора
+                addMarkers(events); // Добавляем метки всех мероприятий в кластеризатор
+                myMap.setCenter([57.126122, 65.57817], 12, { duration: 800, timingFunction: 'ease-in-out' });
+            };
+            eventsList.appendChild(back);
+
+            typesList.style.display = 'none';
+            eventsList.style.display = 'block';
+
+            events.forEach(async function (event) {
+                if (event.type === type) {
+                    var eventElement = document.createElement('div');
+                    eventElement.classList.add('event');
+                    var remainingSeats = event.capacity - event.attendees;
+                    var seatColor = remainingSeats > 0 ? 'green' : 'red'; // Цвет зависит от количества оставшихся мест  
+
+                    const address = await formatCoordinates(event.coordinates); // Ожидаем получение адреса
+
+                    eventElement.innerHTML = `
+                    <p id="organization">${event.organization}</p>
+                    <p>${address}</p>
+                    <p>${event.date}</p>
+                    <div class="event-image"><img src="${event.image}" alt="${event.name}" class="event-image"></div>
+                    <p class="event-name">${event.name}</p>   
+                    <p id="price">${event.price} ₽</p>
+                    <p>${event.description}</p>
+                    <p class="event-time"><span id="time">${event.time}</span><span id="blockseats"><span class="seat-info" style="color: ${seatColor}">${remainingSeats}</span><span> мест</span></span></p>
+                    <a class="green-button">Я пойду</a>
+                        `;
+                    eventElement.onclick = function () {
+                        myMap.setCenter(event.coordinates, 15, { duration: 700, timingFunction: 'ease-in-out' });
+                    };
+                    eventsList.appendChild(eventElement);
+
+                    // Добавляем на карту только метки выбранного типа
+                    var placemark = new ymaps.Placemark(event.coordinates, {
+                        hintContent: event.name,
+                        balloonContent: event.name
+                    }, {
+                        iconLayout: 'default#image',
+                        iconImageHref: icons[event.type],
+                        iconImageSize: [30, 36.1],
+                        iconImageOffset: [-15, -15]
+                    });
+
+                    // Добавляем метку в кластеризатор
+                    clusterer.add(placemark);
+                }
+            });
+        }
+
+        // Функция для форматирования координат в адрес
+        function formatCoordinates(coordinates) {
+            const latitude = coordinates[0];
+            const longitude = coordinates[1];
+            const apiKey = 'd24af2a9-8cbb-43dd-a6b0-8a73e11b2e36';
+
+            return new Promise((resolve, reject) => {
+                fetch(`https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&format=json&geocode=${longitude},${latitude}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const addressComponents = data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.Address.Components;
+                        let address = '';
+
+                        // Ищем компоненты адреса, которые соответствуют городу, улице, дому и квартире
+                        for (let component of addressComponents) {
+                            if (component.kind === 'locality' || component.kind === 'street' || component.kind === 'house' || component.kind === 'room') {
+                                address += component.name + ', ';
+                            }
+                        }
+
+                        // Удаляем последнюю запятую и пробел
+                        address = address.slice(0, -2);
+
+                        resolve(address);
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при получении адреса:', error);
+                        reject('Адрес не найден');
+                    });
+            });
+        }
+
+        //Поиск мероприятий
+        var searchInput = document.getElementById('search');
+        searchInput.addEventListener('input', function (e) {
+            var searchText = e.target.value.trim().toLowerCase();
+            var searchResults = document.querySelector('.search-results');
+            searchResults.innerHTML = '';
+
+            if (searchText === '') {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            var matches = events.filter(function (event) {
+                return event.name.toLowerCase().includes(searchText);
+            });
+
+            if (matches.length === 0) {
+                var noResults = document.createElement('div');
+                noResults.textContent = 'Нет результатов';
+                searchResults.appendChild(noResults);
+                searchResults.style.display = 'block';
+                return;
+            }
+
+            matches.forEach(function (match) {
+                var result = document.createElement('div');
+                result.textContent = match.name;
+                result.classList.add('event');
+                result.onclick = function () {
+                    myMap.setCenter(match.coordinates, 15, { duration: 800, timingFunction: 'ease-in-out' });
+                    searchInput.value = '';
+                    searchResults.style.display = 'none';
+                };
+                searchResults.appendChild(result);
+            });
+
+            searchResults.style.display = 'block';
+        });
+
+        // Получаем кнопку и модальное окно
+        var personalPageButton = document.getElementById("personalPageButton");
+        var modal = document.getElementById("loginModal");
+
+        // При нажатии на кнопку, отображаем модальное окно
+        personalPageButton.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // Обработка отправки формы
+        var loginForm = document.getElementById("loginForm");
+
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+
+            // Здесь вы можете добавить логику для отправки данных на сервер или выполнения других действий
+
+            // После успешной отправки данных, вы можете закрыть модальное окно
+            closeModal();
+        });
+
+        // Функция для закрытия модального окна
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // Когда пользователь нажимает на <span> (x), закрываем модальное окно
+        var closeBtn = document.getElementsByClassName("close")[0];
+        closeBtn.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // Закрываем модальное окно, если пользователь щелкает за его пределами
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Получаем все элементы типов мероприятий
+        var eventTypes = document.querySelectorAll('.event-type');
+
+        // Получаем список мероприятий
+        var eventsList = document.querySelector('.events-list');
+
+        // Добавляем обработчик события для каждого типа мероприятий
+        eventTypes.forEach(function (eventType) {
+            eventType.addEventListener('click', function () {
+                // Удаляем класс, скрывающий список мероприятий
+                eventsList.classList.remove('hidden');
+                // Добавляем анимацию для плавного появления списка
+                eventsList.classList.add('fadeIn');
+            });
+        });
+
+        // Добавим обработчик события boundschange для изменения размера меток при масштабировании
+        myMap.events.add('boundschange', function (e) {
+            var newZoom = e.get('newZoom');
+            var placemarks = myMap.geoObjects.getArray();
+
+            placemarks.forEach(function (placemark) {
+                // Применим класс с анимацией изменения размера
+                placemark.options.set('iconLayout', 'default#imageWithContent');
+                placemark.options.set('iconImageSize', [30, 36.1]);
+                placemark.options.set('iconImageOffset', [-15, -15]);
+
+                // Установим новый размер метки
+                placemark.options.set('zIndexHover', newZoom); // Чем ближе, тем выше будет метка
+            });
+        });
+
+
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,545 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 18px;
+}
+
+#container {
+    display: flex;
+    height: 100%;
+}
+
+#sidebar {
+    width: 340px;
+    background-color: #f1f1f1;
+    overflow-y: auto;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.2);
+    /* Добавляем тень на правую сторону сайдбара */
+    z-index: 1;
+    /* Устанавливаем z-index, чтобы сайдбар находился над картой */
+}
+
+#map {
+    flex: 1;
+    /* Занимает всю доступную ширину */
+    transition: width 0.3s ease;
+    /* Плавная анимация изменения ширины */
+    box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1);
+    /* Добавляем тень на левую сторону карты */
+}
+
+#sidebar::-webkit-scrollbar {
+    width: 5px;
+    /* ширина scrollbar */
+}
+
+#sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* цвет дорожки */
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    background-color: #bbbbbb;
+    /* цвет плашки */
+    border-radius: 10px;
+    /* закругления плашки */
+    border: 3px solid #cfcfcf;
+    /* padding вокруг плашки */
+}
+
+#back {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: fixed;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    cursor: pointer;
+    margin-left: 360px;
+    margin-bottom: 30px;
+    animation: fadeIn2 0.2s ease-in-out;
+    background-color: #eee;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
+}
+
+#back:hover {
+    background-color: #ddd;
+}
+
+#backImage {
+    margin: auto;
+    width: 23px;
+    rotate: 180deg;
+}
+
+.event {
+    border-bottom: 1px solid rgba(204, 204, 204, 0.448);
+}
+
+#showWholeCity {
+    cursor: pointer;
+    color: rgb(233, 233, 233);
+    padding: 10px;
+    margin-bottom: 2px;
+    border-radius: 10px;
+}
+
+#showWholeCity:hover {
+    color: white;
+    transition: color 0.2s ease;
+    border-color: #888888;
+}
+
+.f-list {
+    padding: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s ease;
+}
+
+#checked {
+    color: #007bff;
+}
+
+.checked {
+    color: #007bff;
+}
+
+.f-list:hover {
+    background-color: #ddd;
+    transition: background-color 0.3s ease;
+    border-color: #888888;
+}
+
+
+.logo {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+#logo {
+    width: 10%;
+}
+
+.sidebarhead {
+    position: fixed;
+    color: white;
+    z-index: 10;
+}
+
+#sidebar .sidebarhead {
+    padding: 20px;
+    width: 300px;
+}
+
+#search {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #ccc;
+    box-sizing: border-box;
+    font-size: 18px;
+}
+
+
+
+#city {
+    margin-bottom: 4px;
+
+}
+
+#date {
+    margin-bottom: 20px;
+}
+
+
+.topofsidebar {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-direction: column;
+}
+
+.circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.1s ease-in-out;
+    cursor: pointer;
+    /* Меньший отступ между кружками и надписями */
+}
+
+.circle:hover {
+    transform: scale(110%);
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
+    /* Начальная тень */
+}
+
+
+
+.types-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    /* Или любое другое значение, в зависимости от вашего дизайна */
+
+}
+
+/* Стили для каждого типа мероприятия */
+.event-type {
+    width: calc(33% - 5px);
+    /* Разделение на два столбца с небольшим отступом */
+    margin-bottom: 10px;
+}
+
+
+.types-list {
+    margin-top: 320px;
+    padding: 10px;
+}
+
+.types-list .event-type {
+    margin-bottom: 10px;
+}
+
+.event-type-name {
+    font-size: 15px;
+    height: auto;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5px;
+    /* Центрируем содержимое по горизонтали */
+}
+
+p.event-type-name {
+    text-align: center;
+}
+
+
+.event-type-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px
+        /* Центрируем содержимое по горизонтали */
+}
+
+
+
+
+.event-type-count {
+    font-size: 20px;
+    font-weight: light;
+    color: #fff;
+}
+
+.search-results {
+    margin-top: 0px;
+}
+
+/* Кнопка перехода на личную страничку */
+#personalPageButton {
+    position: absolute;
+    top: 60px;
+    right: 9px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 20%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 1000;
+}
+
+#personalPageButton i {
+    color: #000;
+    font-size: 20px;
+
+}
+
+#userImage {
+    width: 70%;
+    height: auto;
+    border-radius: 50%;
+    /* делаем изображение круглым */
+}
+
+#personalPageButton:hover {
+    background-color: #ddd;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.2);
+    /* Затемненный фон */
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 5px;
+    width: 20%;
+}
+
+.tabholder {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.tabholder div {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.tablike-active {
+    text-decoration: underline;
+}
+
+.tablike:hover {
+    color: #888;
+}
+
+/* Закрыть кнопку */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Стили для формы */
+#loginForm {
+    margin-top: 5px;
+}
+
+#loginForm label {
+    margin-bottom: 5px;
+    display: block;
+}
+
+#loginForm input[type="text"],
+#loginForm input[type="password"],
+#loginForm button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#loginForm button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.event-image {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+#loginForm button:hover {
+    background-color: #45a049;
+}
+
+/* Добавьте эти классы в ваш файл стилей */
+
+/* Анимация для появления списка мероприятий */
+.fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Анимация для скрытия списка мероприятий */
+.fadeOut {
+    animation: fadeOut 0.5s ease-in-out;
+}
+
+/* Ключевые кадры для анимации появления */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn2 {
+    from {
+        margin-left: 330px;
+        opacity: 0;
+    }
+
+    to {
+        margin-left: 360px;
+        opacity: 1;
+    }
+}
+
+/* Ключевые кадры для анимации скрытия */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+
+
+/* Стили для скрытия элемента */
+.hidden {
+    display: none !important;
+}
+
+.placemark-animation {
+    transition: transform 0.3s ease;
+}
+
+.placemark-hidden {
+    display: none !important;
+}
+
+#organization {
+    font-size: 28px;
+    font-weight: bold;
+    color: #323232;
+    margin-bottom: auto;
+}
+
+.event-name {
+    font-size: 25px;
+    font-weight: 500;
+    color: rgb(0, 106, 255);
+    margin-bottom: auto;
+}
+
+#price {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.event-time {
+    font-size: 20px;
+    font-weight: 300;
+    margin-bottom: auto;
+}
+
+#time {
+
+    margin-right: 26px;
+}
+
+.seat-info {
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+#blockseats {
+    background-color: #dfdfdf;
+    padding-left: 5px;
+    padding-right: 9px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.green-button {
+    display: inline-block;
+    background-color: green;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 550;
+}
+
+.back-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+    z-index: 1001;
+    /* Убедитесь, что кнопка отображается поверх */
+    display: none;
+    /* Изначально скрыта */
+}
+
+
+.fade-out {
+    animation: fadeOut 0.3s forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}

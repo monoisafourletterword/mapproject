@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет Организации</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full&lazy=true"></script>
+
+    <style>
+        /* Общие стили */
+        #sidebar {
+            width: 340px;
+            background-color: #f1f1f1;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 5px 0 10px rgba(0, 0, 0, 0.2);
+            /* Добавляем тень на правую сторону сайдбара */
+            z-index: 4;
+            /* Устанавливаем z-index, чтобы сайдбар находился над картой */
+        }
+
+        .content {
+            margin-left: 10px;
+            padding: 20px;
+            width: 100%;
+            position: flex;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+
+        /* Стили для логотипа */
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+
+        }
+
+        .logo img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 5px #555 solid;
+        }
+
+        /* Стили для названия организации */
+        .organization-name {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Стили для подписи организации */
+        .organization-description {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+
+        ul {
+            display: block;
+            list-style-type: disc;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            padding-inline-start: 0px;
+        }
+
+        a {
+            color: black;
+            text-decoration: none;
+            font-weight: 300;
+            font-size: large;
+        }
+
+        a:visited {
+            color: black;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        .functions-list {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .organization-description {
+            margin-bottom: 20px;
+        }
+
+        input,
+        textarea {
+            border: 2px #a5a5a5 solid;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input {
+            width: 300px;
+            height: 23px;
+        }
+
+        .drop-zone {
+            display: flex;
+            border: 2px dashed #a5a5a5;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            width: 250px;
+            height: 100px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .drop-zone:hover {
+            background-color: #d3d3d3;
+            transition: background-color 0.2s ease;
+        }
+
+        .drop-zone-hover {
+            background-color: #d3d3d3;
+            transition: background-color 0.2s ease;
+        }
+
+        textarea {
+            width: 500px;
+            height: 100px;
+            resize: none;
+            font-size: 15px;
+        }
+
+        #eventType {
+            width: 306px;
+            height: 30px;
+            border: 2px solid #a5a5a5;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        #eventPrice {
+            width: 100px;
+            height: 23px;
+            font-size: 15px;
+        }
+
+        #eventDate {
+            width: 300px;
+            height: 30px;
+            border: 2px solid #a5a5a5;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        #eventTime {
+            width: 100px;
+            height: 23px;
+            border: 2px solid #a5a5a5;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        #tire {
+            font-weight: 300;
+            font-size: 20px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        input,
+        select,
+        textarea {
+
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 400;
+        }
+
+        form button {
+            width: 200px;
+            right: 0;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-and-map-container {
+            position: relative;
+            display: flex;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .form-container {
+            margin-right: 50px;
+            /* Отступ между формой и картой */
+        }
+
+        ::placeholder {
+            margin-left: 10px;
+        }
+
+        .map-container {
+            width: 400px;
+            /* Ширина контейнера карты */
+            height: 800px;
+            /* Высота контейнера карты */
+        }
+
+        #map {
+            border-radius: 10px;
+        }
+
+        #suggestions {
+            position: absolute;
+            border: 1px solid #a5a5a5;
+            border-top: none;
+            z-index: 1000;
+            width: 300px;
+            background: white;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f2f2f2;
+        }
+
+        .f-list a.checked {
+            color: #007bff;
+        }
+
+        .menu-item {
+            cursor: pointer;
+            padding: 2px;
+            transition: opacity 0.5s ease;
+        }
+
+        .event {
+            width: 500px;
+            margin-right: 150px;
+        }
+
+        #events-list {
+            position: relative;
+            display: flex;
+            margin-left: 20px;
+            margin-right: 20px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        #profileForm {
+            display: flex;
+            flex-direction: column;
+
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <!-- Сайдбар -->
+        <div id="sidebar">
+            <div class="logo">
+                <img src="https://sun9-18.userapi.com/impf/Nkch5gumnBzJXR2U6WXya27mPgxJdLGJO1GgHA/q3FdKMXr6uI.jpg?size=604x453&quality=96&sign=10e3325660770b89d03b0260625f4e39&c_uniq_tag=Dma4nsJra6QchZs5-3YO1s255dS_q4CAusTqwMSLyKY&type=album"
+                    alt="Логотип Организации">
+            </div>
+            <div class="organization-name">Название Организации</div>
+            <div class="organization-description">Гончарная мастерская</div>
+            <div class="functions-list">
+                <ul style="list-style-type: none;">
+                    <li class="f-list">
+                        <div class="menu-item"><a href="#add_event">Добавить мероприятие</a></div>
+                    </li>
+                    <li class="f-list">
+                        <div class="menu-item"><a href="#active_events">Активные мероприятия</a></div>
+                    </li>
+                    <li class="f-list">
+                        <div class="menu-item"><a href="#archived_events">Архив мероприятий</a></div>
+                    </li>
+                    <li class="f-list">
+                        <div class="menu-item"><a href="#organization_profile">Профиль организации</a></div>
+                    </li>
+                    <li class="f-list">
+                        <div class="menu-item"><a href="#help">Помощь</a></div>
+                    </li>
+                    <li class="f-list">
+                        <a href="maptmn2.html">
+                            <div class="menu-item external-link">Назад на карту</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Контент -->
+        <div class="content">
+            <!-- Сюда будет подставляться контент в зависимости от выбранного пункта -->
+            <!-- Пример контента для страницы "Добавить мероприятие" -->
+            <div id="add_event" style="display: none;">
+                <h1 class="checked">Добавить мероприятие</h1>
+
+                <div class="form-and-map-container">
+                    <div class="form-container">
+                        <form id="eventForm">
+                            <div class="upload-container">
+                                <label for="eventImage">Загрузить фото</label>
+                                <br>
+                                <div class="drop-zone" id="drop_zone_event">Перетащите изображение сюда или кликните для
+                                    выбора файла</div>
+                                <input type="file" id="eventImage" name="eventImage" accept="image/*" required
+                                    style="display: none;">
+                            </div>
+
+                            <div>
+                                <label for="eventName">Название мероприятия</label>
+                                <br><input type="text" id="eventName" name="eventName" required>
+                            </div>
+
+                            <div>
+                                <label for="eventType">Тип мероприятия</label>
+                                <br><select id="eventType" name="eventType" required>
+                                    <option selected="true" disabled="disabled">Выберите тип мероприятия</option>
+                                    <option value="Фитнес и здоровье">Фитнес и здоровье</option>
+                                    <option value="Спортивные">Спортивные</option>
+                                    <option value="Экскурсии">Экскурсии</option>
+                                    <option value="Выставки">Выставки</option>
+                                    <option value="На свежем воздухе">На свежем воздухе</option>
+                                    <option value="Мастер-классы">Мастер-классы</option>
+                                    <option value="Театральные постановки">Театральные постановки</option>
+                                    <option value="Лекции и семинары">Лекции и семинары</option>
+                                    <option value="Клубы по интересам">Клубы по интересам</option>
+                                    <option value="Квизы и викторины">Квизы и викторины</option>
+                                    <option value="Конференции">Конференции</option>
+                                    <option value="Фестивали">Фестивали</option>
+                                    <option value="Концерты">Концерты</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="eventAddress">Адрес мероприятия</label>
+                                <br><input type="text" id="eventAddress" name="eventAddress" autocomplete="off"
+                                    placeholder="Город, улица ..." required>
+                                <div id="suggestions"></div>
+                            </div>
+                            <div>
+                                <label for="eventCoordinates">Координаты</label>
+                                <br><input type="text" id="eventCoordinates" name="eventCoordinates"
+                                    placeholder="Выберите точку на карте" readonly required>
+                            </div>
+                            <!-- Consider splitting this into two fields if you want to enforce more structured data -->
+
+                            <div>
+                                <label for="eventDescription">Описание</label>
+                                <br><textarea id="eventDescription" name="eventDescription" required></textarea>
+                            </div>
+                            <div>
+                                <label for="eventCapacity">Количество участников</label>
+                                <br><input type="number" id="eventCapacity" name="eventCapacity" required>
+                            </div>
+                            <div>
+                                <label for="eventPrice">Цена</label>
+                                <br><input type="number" id="eventPrice" name="eventPrice" required> ₽
+                            </div>
+                            <div>
+                                <label for="eventDate">Дата</label>
+                                <br><input type="date" id="eventDate" name="eventDate" required>
+                            </div>
+                            <div>
+                                <label for="eventTime">Время</label>
+                                <br><input type="time" id="eventTime" name="eventTime" required><span
+                                    id="tire">-</span><input type="time" id="eventTime" name="eventTime" required>
+                            </div>
+
+                            <div>
+                                <button type="submit">Добавить мероприятие</button>
+                            </div>
+                        </form>
+                        <!-- Для проверки формы ПОТОМ УДАЛИТЬ -->
+
+                    </div>
+
+                    <div id="map"></div>
+
+                    <div id="formDataDisplay"></div>
+                </div>
+            </div>
+
+            <!-- Пример контента для страницы "Активные мероприятия" -->
+            <div id="active_events" style="display: none;">
+                <h1 class="checked">Активные мероприятия</h1>
+                <div id="events-list"></div>
+                <!-- Список мероприятий организации -->
+            </div>
+
+            <!-- Пример контента для страницы "Архив мероприятий" -->
+            <div id="archived_events" style="display: none;">
+                <h1 class="checked">Архив мероприятий</h1>
+                <!-- Список архивных мероприятий -->
+            </div>
+
+            <!-- Пример контента для страницы "Профиль организации" -->
+            <div id="organization_profile" style="display: none;">
+                <h1 class="checked">Профиль организации</h1>
+                <form id="profileForm">
+                    <label for="orgName">Название организации</label>
+                    <input type="text" id="orgName" name="orgName">
+                    <label for="orgDescription">Описание</label>
+                    <textarea id="orgDescription" name="orgDescription"></textarea>
+                    <div class="upload-container">
+                        <label for="orgImage">Загрузить фото</label>
+                        <br>
+                        <div class="drop-zone" id="drop_zone_profile">Перетащите изображение сюда или кликните для
+                            выбора файла</div>
+                        <input type="file" id="orgImage" name="orgImage" accept="image/*" style="display: none;">
+                    </div>
+                    <label for="orgWebsite">Веб-сайт</label>
+                    <input type="text" id="orgWebsite" name="orgWebsite">
+                    <button type="submit">Сохранить изменения</button>
+                </form>
+            </div>
+
+
+            <!-- Пример контента для страницы "Помощь" -->
+            <div id="help" style="display: none;">
+                <h1 class="checked">Помощь</h1>
+                <!-- Информация о помощи и инструкции -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Переключение пунктов меню -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var menuItems = document.querySelectorAll('.f-list .menu-item:not(.external-link)');
+            menuItems.forEach(function (menuItem) {
+                menuItem.addEventListener('click', function () {
+                    var link = this.querySelector('a');
+                    var contentId = link.getAttribute('href').substring(1); // Получаем идентификатор без '#'
+
+                    // Переключаем контент
+                    showContent(contentId);
+
+                    // Обновляем класс 'checked'
+                    document.querySelector('.f-list a.checked')?.classList.remove('checked');
+                    link.classList.add('checked');
+                });
+            });
+
+            function showContent(contentId) {
+                var contents = document.querySelectorAll('.content > div');
+                contents.forEach(function (content) {
+                    content.style.display = 'none';
+                });
+
+                var selectedContent = document.getElementById(contentId);
+                if (selectedContent) {
+                    selectedContent.style.display = 'block';
+                }
+            }
+
+            // По умолчанию отображаем контент для первого пункта и делаем его ссылку активной
+            showContent('add_event');
+            document.querySelector('a[href="#add_event"]').classList.add('checked');
+        });
+
+
+    </script>
+
+    <!-- Отправка формы при добавлении -->
+    <script>
+        var events = []; // Assuming this script replaces events.js, initialize the events array here
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('eventForm').addEventListener('submit', function (event) {
+                event.preventDefault(); // Предотвращаем стандартную отправку формы
+
+                // Получаем выбранное значение для типа мероприятия
+                var eventType = document.getElementById('eventType').value;
+
+                // Проверяем, выбран ли тип мероприятия
+                if (eventType === "Выберите тип мероприятия" || eventType === "") {
+                    alert('Пожалуйста, выберите тип мероприятия.');
+                    return; // Прекращаем выполнение функции, не добавляя мероприятие
+                }
+
+                var coordinates = document.getElementById('eventCoordinates').value.split(',').map(function (item) {
+                    return parseFloat(item.trim());
+                });
+
+                var newEvent = {
+                    name: document.getElementById('eventName').value,
+                    type: document.getElementById('eventType').value,
+                    organization: document.getElementById('eventOrganization').value,
+                    coordinates: coordinates,
+                    image: document.getElementById('eventImage').value,
+                    description: document.getElementById('eventDescription').value,
+                    date: document.getElementById('eventDate').value,
+                    time: document.getElementById('eventTime').value,
+                    price: document.getElementById('eventPrice').value,
+                    capacity: parseInt(document.getElementById('eventCapacity').value),
+                    attendees: parseInt(document.getElementById('eventAttendees').value)
+                };
+
+                events.push(newEvent);
+                alert('Мероприятие добавлено успешно!');
+
+                // Optionally clear form fields here
+            });
+        });
+    </script>
+
+    <!-- Добавление стиля при фокусировке в Добавлении мероприятия -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var formControls = document.querySelectorAll('.form-control');
+            formControls.forEach(function (input) {
+                input.addEventListener('focus', function () {
+                    this.parentNode.classList.add('input-focused');
+                });
+                input.addEventListener('blur', function () {
+                    if (this.value == "") {
+                        this.parentNode.classList.remove('input-focused');
+                    }
+                });
+            });
+        });
+
+    </script>
+
+    <!-- Перенос файла для добавления изображения в добавлении мероприятия-->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var dropZoneEvent = document.getElementById('drop_zone_event');
+            var fileInputEvent = document.getElementById('eventImage');
+
+            dropZoneEvent.addEventListener('click', function () {
+                fileInputEvent.click();
+            });
+
+            dropZoneEvent.addEventListener('dragover', function (e) {
+                e.preventDefault();
+                dropZoneEvent.classList.add('drop-zone-hover');
+            });
+
+            dropZoneEvent.addEventListener('dragleave', function (e) {
+                e.preventDefault();
+                dropZoneEvent.classList.remove('drop-zone-hover');
+            });
+
+            dropZoneEvent.addEventListener('drop', function (e) {
+                e.preventDefault();
+                dropZoneEvent.classList.remove('drop-zone-hover');
+
+                if (e.dataTransfer.files.length) {
+                    fileInputEvent.files = e.dataTransfer.files;
+                    dropZoneEvent.textContent = e.dataTransfer.files[0].name;
+                }
+            });
+
+            fileInputEvent.addEventListener('change', function () {
+                if (fileInputEvent.files.length) {
+                    dropZoneEvent.textContent = fileInputEvent.files[0].name;
+                } else {
+                    dropZoneEvent.textContent = 'Перетащите изображение сюда или кликните для выбора файла';
+                }
+            });
+        });
+
+    </script>
+
+    <!-- Перенос файла для добавления изображения в профиле организации-->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var dropZoneProfile = document.getElementById('drop_zone_profile');
+            var fileInputProfile = document.getElementById('orgImage');
+
+            dropZoneProfile.addEventListener('click', function () {
+                fileInputProfile.click();
+            });
+
+            dropZoneProfile.addEventListener('dragover', function (e) {
+                e.preventDefault();
+                dropZoneProfile.classList.add('drop-zone-hover');
+            });
+
+            dropZoneProfile.addEventListener('dragleave', function (e) {
+                e.preventDefault();
+                dropZoneProfile.classList.remove('drop-zone-hover');
+            });
+
+            dropZoneProfile.addEventListener('drop', function (e) {
+                e.preventDefault();
+                dropZoneProfile.classList.remove('drop-zone-hover');
+
+                if (e.dataTransfer.files.length) {
+                    fileInputProfile.files = e.dataTransfer.files;
+                    dropZoneProfile.textContent = e.dataTransfer.files[0].name;
+                }
+            });
+
+            fileInputProfile.addEventListener('change', function () {
+                if (fileInputProfile.files.length) {
+                    dropZoneProfile.textContent = fileInputProfile.files[0].name;
+                } else {
+                    dropZoneProfile.textContent = 'Перетащите изображение сюда или кликните для выбора файла';
+                }
+            });
+        });
+
+    </script>
+
+
+    <!-- Для красоты -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // ...код для других зон...
+
+            var dropZoneProfile = document.getElementById('drop_zone_profile');
+            var fileInputProfile = document.getElementById('orgImage');
+
+            addDragEvents(dropZoneProfile, fileInputProfile);
+
+            // Функция для добавления обработчиков событий перетаскивания
+            function addDragEvents(dropZone, fileInput) {
+                dropZone.addEventListener('click', function () {
+                    fileInput.click();
+                });
+
+                dropZone.addEventListener('dragover', function (e) {
+                    e.preventDefault();
+                    dropZone.classList.add('drop-zone-hover');
+                });
+
+                dropZone.addEventListener('dragleave', function (e) {
+                    e.preventDefault();
+                    dropZone.classList.remove('drop-zone-hover');
+                });
+
+                dropZone.addEventListener('drop', function (e) {
+                    e.preventDefault();
+                    dropZone.classList.remove('drop-zone-hover');
+
+                    if (e.dataTransfer.files.length) {
+                        fileInput.files = e.dataTransfer.files;
+                        dropZone.textContent = e.dataTransfer.files[0].name;
+                    }
+                });
+
+                fileInput.addEventListener('change', function () {
+                    if (fileInput.files.length) {
+                        dropZone.textContent = fileInput.files[0].name;
+                    } else {
+                        dropZone.textContent = 'Перетащите изображение сюда или кликните для выбора файла';
+                    }
+                });
+            }
+
+            // Применить функцию для других зон, если нужно
+        });
+
+    </script>
+
+    <!-- Собственные иконки и поиск по адресу через API -->
+    <script src="icons.js"></script>
+    <script>
+        function getIconUrl(eventType) {
+            return icons[eventType] || defaultIconPath; // Используем иконку из icons.js или стандартную, если нет соответствия
+        }
+
+        // Функция для поиска адресов и отображения подсказок
+        function searchAddress(query) {
+            var geocodeUrl = `https://catalog.api.2gis.com/3.0/items/geocode?q=${encodeURIComponent(query)}&fields=items.point&key=fd0b12bb-aa73-4032-923c-a1c2f066cb81`;
+
+            fetch(geocodeUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result && data.result.items.length > 0) {
+                        // Так как ожидается один результат, берём первый элемент
+                        var item = data.result.items[0];
+                        setMarkerAndAddress(item.point.lat, item.point.lon, item.full_name);
+                    } else {
+                        console.log('Адрес не найден');
+                    }
+                })
+                .catch(error => console.error('Ошибка при получении данных:', error));
+        }
+
+    </script>
+
+
+    <!-- Добавить мероприятие -->
+    <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
+    <script src="https://unpkg.com/@2gis/mapgl-clusterer@^2/dist/clustering.js"></script>
+    <script src="https://unpkg.com/@2gis/mapgl-gltf@^1/dist/bundle.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var map, marker;
+
+            // Инициализация карты
+            DG.then(function () {
+                map = DG.map('map', {
+                    center: [57.152985, 65.541227],
+                    zoom: 13
+                });
+            });
+
+            document.getElementById('eventAddress').addEventListener('input', function () {
+                var query = this.value.trim();
+                if (query.length > 2) {
+                    searchAddress(query); // Вызов функции для поиска адресов
+                } else {
+                    document.getElementById('suggestions').style.display = 'none';
+                }
+            });
+
+            function searchAddress(query) {
+                // Используем геокодирование для поиска зданий
+                var geocodeUrl = `https://catalog.api.2gis.com/3.0/items/geocode?q=${encodeURIComponent(query)}&fields=items.point,items.full_name&key=fd0b12bb-aa73-4032-923c-a1c2f066cb81`;
+
+                fetch(geocodeUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.result && data.result.items && data.result.items.length > 0) {
+                            showSuggestions(data.result.items);
+                        }
+                    })
+                    .catch(error => console.error('Ошибка при получении данных:', error));
+            }
+
+            function showSuggestions(items) {
+                var suggestionsContainer = document.getElementById('suggestions');
+                suggestionsContainer.innerHTML = '';
+                items.forEach(function (item) {
+                    var div = document.createElement('div');
+                    div.className = 'suggestion-item';
+                    div.textContent = item.full_name; // Используем полное имя для более точного адреса
+                    div.onclick = function () {
+                        document.getElementById('eventAddress').value = item.full_name;
+                        document.getElementById('eventCoordinates').value = `${item.point.lat}, ${item.point.lon}`;
+                        setMarker(item.point.lat, item.point.lon);
+                        suggestionsContainer.style.display = 'none';
+                    };
+                    suggestionsContainer.appendChild(div);
+                });
+                suggestionsContainer.style.display = 'block';
+            }
+
+            function setMarker(lat, lon) {
+                if (marker) marker.remove();
+
+                var eventType = document.getElementById('eventType').value;
+                var iconUrl = getIconUrl(eventType);
+
+                marker = DG.marker([lat, lon], {
+                    icon: DG.icon({
+                        iconUrl: iconUrl,
+                        iconRetinaUrl: iconUrl,
+                        iconSize: [30, 36.1], // Размер иконки, возможно потребуется настроить
+                        iconAnchor: [18, 36], // Точка, относительно которой иконка будет размещена
+                        popupAnchor: [0, -36] // Смещение всплывающего окна относительно иконки
+                    })
+                }).addTo(map);
+
+                map.setView([lat, lon], 16);
+            }
+
+            document.getElementById('eventType').addEventListener('change', function () {
+                if (marker) {
+                    var latLon = marker.getLatLng();
+                    setMarker(latLon.lat, latLon.lng); // Обновляем маркер с новой иконкой
+                }
+            });
+
+
+        });
+
+    </script>
+
+
+    <!-- Активные мероприятия и форматирование координат -->
+    <script src="events.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            function showActiveEvents() {
+                // Получаем контейнер, в который будем добавлять мероприятия
+                var eventsContainer = document.getElementById('events-list');
+                // Очищаем контейнер от предыдущих мероприятий
+
+                // Фильтруем мероприятия по имени организации
+                var activeEvents = events.filter(function (event) {
+                    return event.organization == "Искусство в движении";
+                });
+
+                // Для каждого мероприятия создаем HTML-разметку и добавляем ее на страницу
+                activeEvents.forEach(function (event) {
+                    var eventElement = document.createElement('div');
+                    eventElement.classList.add('event');
+                    var address = event.coordinates;
+
+                    formatCoordinates(event.coordinates).then(address => {
+                        var seatColor = remainingSeats > 0 ? 'green' : 'red';
+                        var remainingSeats = event.capacity - event.attendees;
+                        // Здесь вы можете использовать вашу HTML-разметку для каждого мероприятия
+                        eventElement.innerHTML = `
+                <p id="organization">${event.organization}</p>
+                <p>Тюмень, ${address}</p>
+                <p>${event.date}</p>
+                <div class="event-image"><img src="${event.image}" alt="${event.name}" class="event-image"></div>
+                <p class="event-name">${event.name}</p>   
+                <p id="price">${event.price} ₽</p>
+                <p>${event.description}</p>
+                <p class="event-time"><span id="time">${event.time}</span><span id="blockseats"><span class="seat-info" style="color: ${seatColor}">${remainingSeats} мест</span></span></p>
+                <a class="green-button">Я пойду</a>
+            `;
+
+                        eventsContainer.appendChild(eventElement);
+                    }).catch(error => {
+                        console.error('Error converting coordinates to address:', error);
+                        // Handle error or insert a placeholder error message in the DOM
+                    });
+                });
+            }
+
+            // При переключении на страницу "Активные мероприятия" отображаем соответствующие мероприятия
+            showActiveEvents();
+        });
+
+        function formatCoordinates(coordinates) {
+            const latitude = coordinates[0];
+            const longitude = coordinates[1];
+            const apiKey = 'fd0b12bb-aa73-4032-923c-a1c2f066cb81'; // Replace 'YOUR_2GIS_API_KEY' with your actual 2GIS API key
+
+            return new Promise((resolve, reject) => {
+                fetch(`https://catalog.api.2gis.com/3.0/items/geocode?lat=${latitude}&lon=${longitude}&fields=items.address&key=${apiKey}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.result && data.result.items.length > 0) {
+                            // Assuming the first result is the most relevant
+                            const address = data.result.items[0].address_name;
+
+                            resolve(address);
+                        } else {
+                            reject('Address not found');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching address:', error);
+                        reject('Address not found');
+                    });
+            });
+        }
+
+    </script>
+
+    <!-- Профиль организации -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var profileForm = document.getElementById('profileForm');
+            var currentOrganization = organizations[0]; // Пример, выбираем первую организацию
+
+            // Функция для загрузки данных профиля
+            function loadProfile() {
+                document.getElementById('orgName').value = currentOrganization.name;
+                document.getElementById('orgDescription').value = currentOrganization.description;
+                document.getElementById('orgImage').value = currentOrganization.image;
+                document.getElementById('orgWebsite').value = currentOrganization.website;
+            }
+
+            // Функция для сохранения изменений
+            profileForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                currentOrganization.name = document.getElementById('orgName').value;
+                currentOrganization.description = document.getElementById('orgDescription').value;
+                currentOrganization.image = document.getElementById('orgImage').value;
+                currentOrganization.website = document.getElementById('orgWebsite').value;
+
+                // Тут можно добавить логику для сохранения данных на сервер или в базу данных
+                alert('Профиль обновлен!');
+            });
+
+            loadProfile(); // Вызываем при загрузке страницы
+        });
+
+    </script>
+
+    <!-- Проверка отправки формы ПОТОМ УДАЛИТЬ -->
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('eventForm').addEventListener('submit', function (event) {
+                event.preventDefault(); // Предотвращаем стандартную отправку формы
+
+                // Собираем данные из формы
+                var formData = [
+                    ['Изображение мероприятия', document.getElementById('eventImage').value],
+                    ['Название мероприятия', document.getElementById('eventName').value],
+                    ['Тип мероприятия', document.getElementById('eventType').value],
+                    ['Адрес мероприятия', document.getElementById('eventAddress').value],
+                    ['Координаты', document.getElementById('eventCoordinates').value],
+                    ['Описание', document.getElementById('eventDescription').value],
+                    ['Количество участников', document.getElementById('eventCapacity').value],
+                    ['Цена', document.getElementById('eventPrice').value + " ₽"],
+                    ['Дата', document.getElementById('eventDate').value],
+                    ['Время начала', document.getElementById('eventTime').value]
+                    // Добавьте остальные поля по аналогии
+                ];
+
+                // Создаем таблицу для отображения данных
+                var tableHtml = '<table border="1"><tr><th>Поле</th><th>Значение</th></tr>';
+                formData.forEach(function (item) {
+                    tableHtml += '<tr><td>' + item[0] + '</td><td>' + item[1] + '</td></tr>';
+                });
+                tableHtml += '</table>';
+
+                // Вставляем таблицу в контейнер для отображения данных
+                document.getElementById('formDataDisplay').innerHTML = tableHtml;
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>

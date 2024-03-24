@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 73 86">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        filter: url(#drop-shadow-2);
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient);
+        filter: url(#drop-shadow-1);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="6.45" y1="37.78" x2="66.54" y2="37.78" gradientUnits="userSpaceOnUse">
+      <stop offset=".02" stop-color="#f9a3b5"/>
+      <stop offset=".14" stop-color="#f89cb1"/>
+      <stop offset=".31" stop-color="#f88ba6"/>
+      <stop offset=".5" stop-color="#f76f94"/>
+      <stop offset=".71" stop-color="#f6487b"/>
+      <stop offset=".94" stop-color="#f4165b"/>
+      <stop offset="1" stop-color="#f40752"/>
+    </linearGradient>
+    <filter id="drop-shadow-1" filterUnits="userSpaceOnUse">
+      <feOffset dx="0" dy="5"/>
+      <feGaussianBlur result="blur" stdDeviation="2"/>
+      <feFlood flood-color="#000" flood-opacity=".3"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="drop-shadow-2" filterUnits="userSpaceOnUse">
+      <feOffset dx="0" dy="5"/>
+      <feGaussianBlur result="blur-2" stdDeviation="2"/>
+      <feFlood flood-color="#000" flood-opacity=".3"/>
+      <feComposite in2="blur-2" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="objects">
+    <g>
+      <path class="cls-2" d="M15.25,52.8C3.52,41.07,3.52,22.04,15.25,10.31,26.98-1.43,46.01-1.43,57.74,10.31s11.73,30.76,0,42.49l-21.25,21.25L15.25,52.8Z"/>
+      <circle class="cls-1" cx="36.5" cy="30.4" r="20.42"/>
+    </g>
+  </g>
+</svg>
